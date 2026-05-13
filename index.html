@@ -616,5 +616,16 @@ function loadGame() {
 loadGame();
 })();
 </script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/math-masters/service-worker.js')
+            .then(function(registration) {
+                console.log('Service Worker зарегистрирован с областью: ', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Ошибка регистрации Service Worker: ', error);
+            });
+    }
+</script>
 </body>
 </html>
