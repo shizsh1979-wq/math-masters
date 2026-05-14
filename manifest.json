@@ -10,9 +10,9 @@
   "theme_color": "#1a3a2a",
   "background_color": "#0a3d2a",
   "launch_handler": {
-  "client_mode": "focus-existing"
-},
-  "categories": ["games", "education"]
+    "client_mode": "focus-existing"
+  },
+  "categories": ["games", "education"],
   "icons": [
     {
       "src": "/math-masters/icon-192.png",
