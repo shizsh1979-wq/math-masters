@@ -3,6 +3,7 @@
   "name": "MathMasters",
   "short_name": "MathMasters",
   "description": "Обучающая математическая игра с жизнями и турнирами",
+  "lang": "ru",
   "start_url": "/math-masters/index.html",
   "display": "standalone",
   "orientation": "portrait",
