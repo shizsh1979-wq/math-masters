@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,7 +7,6 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://yandex.ru/ads/system/adsdk.js" async></script>
     <style>
-        /* ========== ОСНОВНЫЕ СТИЛИ ========== */
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
         body{font-family:system-ui,'Segoe UI','Roboto',sans-serif;background:radial-gradient(circle at 30% 10%,#0a3d2a,#021a0f);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px;position:relative}
         .game-card{max-width:650px;width:100%;background:rgba(10,30,20,0.92);backdrop-filter:blur(4px);border-radius:48px;border:2px solid #ffcc66;box-shadow:0 20px 30px rgba(0,0,0,0.6);overflow:hidden;z-index:1}
@@ -32,45 +30,15 @@
         .lb-player{background:#ffaa4433;border-radius:20px;font-weight:bold}
         .menu-row{display:flex;gap:8px;padding:10px 12px 16px;flex-wrap:wrap}
         .menu-btn{flex:1;background:#2a4a3a;border:none;padding:8px;border-radius:40px;color:#ffdd99;font-weight:bold;cursor:pointer;font-size:0.75rem}
-        
-        /* ========== ПРИНУДИТЕЛЬНО БЕЛЫЙ ТЕКСТ ВО ВСЕХ ДОПОЛНИТЕЛЬНЫХ ЭКРАНАХ ========== */
-        .profile-screen, .stats-screen, .shop-screen,
-        .profile-screen *, .stats-screen *, .shop-screen * {
-            color: white !important;
-        }
-        
-        .profile-screen h2, .stats-screen h3, .shop-screen h3 {
-            color: #ffcc66 !important;
-        }
-        
-        .profile-screen p, .stats-screen p, .shop-screen p,
-        .profile-screen div, .stats-screen div, .shop-screen div,
-        .profile-screen span, .stats-screen span, .shop-screen span {
-            color: white !important;
-        }
-        
-        .achievement-item, .quest-item {
-            background: #1a3a2a;
-            margin: 8px 0;
-            padding: 10px;
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white !important;
-        }
-        
+        .profile-screen,.stats-screen,.shop-screen{background:#0a2a1aee;padding:20px;border-radius:32px}
+        .achievement-item,.quest-item{background:#1a3a2a;margin:8px 0;padding:10px;border-radius:20px;display:flex;justify-content:space-between;align-items:center}
         .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:2000}
-        .modal-content{background:#1a3a2a;border:3px solid #ffaa44;border-radius:48px;padding:20px;text-align:center;width:280px;color:#ffdd99 !important}
+        .modal-content{background:#1a3a2a;border:3px solid #ffaa44;border-radius:48px;padding:20px;text-align:center;width:280px}
         .modal-content input{background:#2a4a3a;border:2px solid #ffaa44;color:white;font-size:1.2rem;padding:10px;border-radius:40px;width:100%;margin:15px 0;text-align:center}
-        .modal-content button{background:#ffaa44;color:#1a3a2a;border:none;padding:8px 20px;border-radius:40px;font-weight:bold}
         .character-option{display:inline-block;margin:8px;padding:8px 15px;background:#2a4a3a;border-radius:40px;cursor:pointer}
         button{cursor:pointer}
-        
         .copyright{position:fixed;bottom:8px;right:12px;font-size:10px;color:#ffaa8888;background:rgba(10,30,20,0.6);padding:4px 10px;border-radius:20px;backdrop-filter:blur(4px);z-index:100;font-family:monospace;pointer-events:none}
         .copyright a{color:#ffaa8888;text-decoration:none}
-        
-        /* Уведомления */
         .notification-toast{position:fixed;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2a6b4a,#1a4a3a);border:2px solid #ffcc44;border-radius:50px;padding:10px 20px;text-align:center;z-index:1000;box-shadow:0 0 30px rgba(255,200,0,0.4);backdrop-filter:blur(8px);animation:slideIn 0.3s ease-out forwards;white-space:nowrap;font-weight:bold}
         .notification-toast.top{top:20px;animation:slideDown 0.3s ease-out forwards}
         .notification-toast.bottom{bottom:20px;animation:slideUp 0.3s ease-out forwards}
@@ -88,6 +56,35 @@
 // ======================= АВТОРСКИЕ ПРАВА =======================
 console.log("%c© MathMasters | Автор: Дмитрий Хайбулин | Контакты: kayfull.in@yandex.ru | Все права защищены", "color:#ffaa44;font-size:14px;font-weight:bold");
 
+// ======================= ПРИНУДИТЕЛЬНЫЙ БЕЛЫЙ ТЕКСТ ЧЕРЕЗ JS =======================
+function forceWhiteText() {
+    setTimeout(() => {
+        // Все элементы в профиле, статистике, магазине
+        const containers = document.querySelectorAll('.profile-screen, .stats-screen, .shop-screen');
+        containers.forEach(container => {
+            if (!container) return;
+            // Красим все элементы внутри
+            const allElements = container.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.color = 'white';
+            });
+            // Но заголовки делаем золотистыми
+            const headings = container.querySelectorAll('h2, h3');
+            headings.forEach(h => {
+                h.style.color = '#ffcc66';
+            });
+        });
+        
+        // Красим достижения и задания
+        const achievementItems = document.querySelectorAll('.achievement-item, .quest-item');
+        achievementItems.forEach(item => {
+            item.style.color = 'white';
+            const spans = item.querySelectorAll('span');
+            spans.forEach(span => span.style.color = 'white');
+        });
+    }, 50);
+}
+
 // ======================= НАСТРОЙКИ =======================
 let playerNickname = localStorage.getItem('playerNickname') || "Игрок";
 let difficulty = localStorage.getItem('gameDifficulty') || "medium";
@@ -103,11 +100,10 @@ const pets = {
     dino: { name: "Динозаврик", emoji: "🦕", price: 5 }
 };
 
-// ======================= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =======================
 function showNicknameModal() {
     const modal = document.createElement('div');
     modal.className = 'modal';
-    modal.innerHTML = `<div class="modal-content"><h3 style="color:#ffdd99">Введите ваш никнейм</h3><input type="text" id="nicknameInput" maxlength="15" placeholder="${playerNickname}" value="${playerNickname}"><button id="saveNicknameBtn">Сохранить</button></div>`;
+    modal.innerHTML = `<div class="modal-content"><h3 style="color:#ffdd99">Введите ваш никнейм</h3><input type="text" id="nicknameInput" maxlength="15" placeholder="${playerNickname}" value="${playerNickname}"><button id="saveNicknameBtn" style="background:#ffaa44; color:#1a3a2a; border:none; padding:8px 20px; border-radius:40px; margin-top:10px; font-weight:bold;">Сохранить</button></div>`;
     document.body.appendChild(modal);
     const input = modal.querySelector('#nicknameInput');
     const saveBtn = modal.querySelector('#saveNicknameBtn');
@@ -120,6 +116,7 @@ function showNicknameModal() {
         modal.remove();
         showNotification(`Никнейм изменён на ${playerNickname}`, "✏️", "top", 2000);
         renderFull();
+        forceWhiteText();
     };
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveBtn.click(); });
     input.focus();
@@ -522,7 +519,6 @@ function updateCupsAndMedals() {
     localStorage.setItem('gameData', JSON.stringify({level:game.level, elo:game.elo, totalCorrect:game.totalCorrect, highestLevel:game.highestLevel, cups:game.cups, medals:game.medals, mathCorrect:game.mathCorrect, winTop3Count:game.winTop3Count}));
 }
 
-// ======================= ОТРИСОВКА =======================
 function renderFull() {
     const root = document.getElementById('appRoot');
     if(!root) return;
@@ -596,6 +592,7 @@ function renderFull() {
         document.getElementById('petBtn')?.addEventListener('click',()=>{ currentScreen='shop'; renderFull(); });
         document.getElementById('questBtn')?.addEventListener('click',()=>{ currentScreen='quests'; renderFull(); });
         document.getElementById('statsBtn')?.addEventListener('click',()=>{ currentScreen='stats'; renderFull(); });
+        forceWhiteText();
     } else if(currentScreen === 'profile') {
         let medalsList = game.medals.map(m => achievementsList[m]?.name || m).join(', ');
         let cupsLine = game.cups.map(c=> ({bronze:"🥉",silver:"🥈",gold:"🥇",platinum:"💎",royal:"👑",legendary:"🌟"}[c] || '🏆')).join(' ');
@@ -609,6 +606,7 @@ function renderFull() {
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
         document.getElementById('nicknameProfileBtn')?.addEventListener('click', showNicknameModal);
+        forceWhiteText();
     } else if(currentScreen === 'shop') {
         let owned = JSON.parse(localStorage.getItem('ownedPets')) || ['cat'];
         let html = `<div class="game-card"><div class="top-bar"><div>🐾 МАГАЗИН</div><button class="badge" id="backBtn">◀ НАЗАД</button></div><div class="shop-screen"><h3>Ваши кубки: ${game.cups.length}</h3>`;
@@ -617,6 +615,7 @@ function renderFull() {
         root.innerHTML = html;
         document.querySelectorAll('.character-option').forEach(el=>{ el.addEventListener('click',()=>{ let petId = el.dataset.pet; let owned = JSON.parse(localStorage.getItem('ownedPets')) || ['cat']; if(owned.includes(petId) || pets[petId].price===0 || game.cups.length >= pets[petId].price) { if(!owned.includes(petId) && pets[petId].price>0) { game.cups = game.cups.filter((_,i)=>i>=pets[petId].price); owned.push(petId); localStorage.setItem('ownedPets', JSON.stringify(owned)); updateCupsAndMedals(); showNotification(`Вы купили ${pets[petId].name}!`, "🎁", "center", 2000); } selectedPet = petId; localStorage.setItem('selectedPet', selectedPet); renderFull(); } else showNotification(`Недостаточно кубков! Нужно ${pets[petId].price}`, "💎", "bottom", 1500); }); });
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
+        forceWhiteText();
     } else if(currentScreen === 'quests') {
         checkDailyReset();
         let html = `<div class="game-card"><div class="top-bar"><div>📋 ЗАДАНИЯ</div><button class="badge" id="backBtn">◀ НАЗАД</button></div><div class="stats-screen"><h3>Ежедневные задания</h3>`;
@@ -626,6 +625,7 @@ function renderFull() {
         html += `</div></div>`;
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
+        forceWhiteText();
     } else if(currentScreen === 'stats') {
         let stats = JSON.parse(localStorage.getItem('statsHistory')) || [];
         stats.push({date:new Date().toDateString(), level:game.level, elo:game.elo, correct:game.totalCorrect});
@@ -636,6 +636,7 @@ function renderFull() {
         html += `</ul><h3>Текущий уровень сложности: ${difficulty==='easy'?'Лёгкий':difficulty==='medium'?'Средний':'Сложный'}</h3><h3>Адаптивный множитель: ${adaptiveMultiplier.toFixed(2)}x</h3></div></div>`;
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
+        forceWhiteText();
     }
     if (lives < 9) { const remaining = getTimeToNextLife(); if (remaining === 0) { restoreLivesOverTime(); renderFull(); } }
 }
@@ -651,6 +652,7 @@ function loadGame() {
     updateCupsAndMedals();
     initMusic(); startMusicOnFirstTouch(); startCheerInterval(); startBotUpdateInterval(); startLifeRestoreChecker();
     renderFull();
+    forceWhiteText();
     window.addEventListener('beforeunload', () => { stopCheerInterval(); stopBotUpdateInterval(); if (lifeRestoreInterval) clearInterval(lifeRestoreInterval); let toSave = {level:game.level, elo:game.elo, totalCorrect:game.totalCorrect, highestLevel:game.highestLevel, cups:game.cups, medals:game.medals, mathCorrect:game.mathCorrect, winTop3Count:game.winTop3Count}; localStorage.setItem('gameData', JSON.stringify(toSave)); });
 }
 loadGame();
