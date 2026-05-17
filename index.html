@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>MathMasters — Математический Турнир (9 жизней)</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://yandex.ru/ads/system/adsdk.js" async></script>
@@ -53,37 +53,14 @@
 <div id="appRoot"></div>
 <div class="copyright">© Дмитрий Хайбулин | <a href="mailto:kayfull.in@yandex.ru">kayfull.in@yandex.ru</a></div>
 <script>
+// === ПРИНУДИТЕЛЬНОЕ СКРЫТИЕ АДРЕСНОЙ СТРОКИ ДЛЯ МОДЕРАЦИИ RUSTORE ===
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        window.scrollTo(0, 1);
+    }, 0);
+});
 // ======================= АВТОРСКИЕ ПРАВА =======================
 console.log("%c© MathMasters | Автор: Дмитрий Хайбулин | Контакты: kayfull.in@yandex.ru | Все права защищены", "color:#ffaa44;font-size:14px;font-weight:bold");
-
-// ======================= ПРИНУДИТЕЛЬНЫЙ БЕЛЫЙ ТЕКСТ ЧЕРЕЗ JS =======================
-function forceWhiteText() {
-    setTimeout(() => {
-        // Все элементы в профиле, статистике, магазине
-        const containers = document.querySelectorAll('.profile-screen, .stats-screen, .shop-screen');
-        containers.forEach(container => {
-            if (!container) return;
-            // Красим все элементы внутри
-            const allElements = container.querySelectorAll('*');
-            allElements.forEach(el => {
-                el.style.color = 'white';
-            });
-            // Но заголовки делаем золотистыми
-            const headings = container.querySelectorAll('h2, h3');
-            headings.forEach(h => {
-                h.style.color = '#ffcc66';
-            });
-        });
-        
-        // Красим достижения и задания
-        const achievementItems = document.querySelectorAll('.achievement-item, .quest-item');
-        achievementItems.forEach(item => {
-            item.style.color = 'white';
-            const spans = item.querySelectorAll('span');
-            spans.forEach(span => span.style.color = 'white');
-        });
-    }, 50);
-}
 
 // ======================= НАСТРОЙКИ =======================
 let playerNickname = localStorage.getItem('playerNickname') || "Игрок";
@@ -116,7 +93,6 @@ function showNicknameModal() {
         modal.remove();
         showNotification(`Никнейм изменён на ${playerNickname}`, "✏️", "top", 2000);
         renderFull();
-        forceWhiteText();
     };
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveBtn.click(); });
     input.focus();
@@ -592,7 +568,6 @@ function renderFull() {
         document.getElementById('petBtn')?.addEventListener('click',()=>{ currentScreen='shop'; renderFull(); });
         document.getElementById('questBtn')?.addEventListener('click',()=>{ currentScreen='quests'; renderFull(); });
         document.getElementById('statsBtn')?.addEventListener('click',()=>{ currentScreen='stats'; renderFull(); });
-        forceWhiteText();
     } else if(currentScreen === 'profile') {
         let medalsList = game.medals.map(m => achievementsList[m]?.name || m).join(', ');
         let cupsLine = game.cups.map(c=> ({bronze:"🥉",silver:"🥈",gold:"🥇",platinum:"💎",royal:"👑",legendary:"🌟"}[c] || '🏆')).join(' ');
@@ -606,7 +581,6 @@ function renderFull() {
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
         document.getElementById('nicknameProfileBtn')?.addEventListener('click', showNicknameModal);
-        forceWhiteText();
     } else if(currentScreen === 'shop') {
         let owned = JSON.parse(localStorage.getItem('ownedPets')) || ['cat'];
         let html = `<div class="game-card"><div class="top-bar"><div>🐾 МАГАЗИН</div><button class="badge" id="backBtn">◀ НАЗАД</button></div><div class="shop-screen"><h3>Ваши кубки: ${game.cups.length}</h3>`;
@@ -615,7 +589,6 @@ function renderFull() {
         root.innerHTML = html;
         document.querySelectorAll('.character-option').forEach(el=>{ el.addEventListener('click',()=>{ let petId = el.dataset.pet; let owned = JSON.parse(localStorage.getItem('ownedPets')) || ['cat']; if(owned.includes(petId) || pets[petId].price===0 || game.cups.length >= pets[petId].price) { if(!owned.includes(petId) && pets[petId].price>0) { game.cups = game.cups.filter((_,i)=>i>=pets[petId].price); owned.push(petId); localStorage.setItem('ownedPets', JSON.stringify(owned)); updateCupsAndMedals(); showNotification(`Вы купили ${pets[petId].name}!`, "🎁", "center", 2000); } selectedPet = petId; localStorage.setItem('selectedPet', selectedPet); renderFull(); } else showNotification(`Недостаточно кубков! Нужно ${pets[petId].price}`, "💎", "bottom", 1500); }); });
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
-        forceWhiteText();
     } else if(currentScreen === 'quests') {
         checkDailyReset();
         let html = `<div class="game-card"><div class="top-bar"><div>📋 ЗАДАНИЯ</div><button class="badge" id="backBtn">◀ НАЗАД</button></div><div class="stats-screen"><h3>Ежедневные задания</h3>`;
@@ -625,7 +598,6 @@ function renderFull() {
         html += `</div></div>`;
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
-        forceWhiteText();
     } else if(currentScreen === 'stats') {
         let stats = JSON.parse(localStorage.getItem('statsHistory')) || [];
         stats.push({date:new Date().toDateString(), level:game.level, elo:game.elo, correct:game.totalCorrect});
@@ -636,7 +608,6 @@ function renderFull() {
         html += `</ul><h3>Текущий уровень сложности: ${difficulty==='easy'?'Лёгкий':difficulty==='medium'?'Средний':'Сложный'}</h3><h3>Адаптивный множитель: ${adaptiveMultiplier.toFixed(2)}x</h3></div></div>`;
         root.innerHTML = html;
         document.getElementById('backBtn')?.addEventListener('click',()=>{ currentScreen='game'; renderFull(); });
-        forceWhiteText();
     }
     if (lives < 9) { const remaining = getTimeToNextLife(); if (remaining === 0) { restoreLivesOverTime(); renderFull(); } }
 }
@@ -652,10 +623,16 @@ function loadGame() {
     updateCupsAndMedals();
     initMusic(); startMusicOnFirstTouch(); startCheerInterval(); startBotUpdateInterval(); startLifeRestoreChecker();
     renderFull();
-    forceWhiteText();
     window.addEventListener('beforeunload', () => { stopCheerInterval(); stopBotUpdateInterval(); if (lifeRestoreInterval) clearInterval(lifeRestoreInterval); let toSave = {level:game.level, elo:game.elo, totalCorrect:game.totalCorrect, highestLevel:game.highestLevel, cups:game.cups, medals:game.medals, mathCorrect:game.mathCorrect, winTop3Count:game.winTop3Count}; localStorage.setItem('gameData', JSON.stringify(toSave)); });
 }
 loadGame();
+</script>
+<script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            window.scrollTo(0, 1);
+        }, 0);
+    });
 </script>
 </body>
 </html>
