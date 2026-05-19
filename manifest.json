@@ -3,25 +3,21 @@
   "name": "MathMasters",
   "short_name": "MathMasters",
   "description": "Обучающая математическая игра с жизнями и турнирами",
-  "lang": "ru",
-  "start_url": "/math-masters/index.html",
+  "start_url": "/",
+  "scope": "/",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#1a3a2a",
   "background_color": "#0a3d2a",
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
-  "categories": ["games", "education"],
   "icons": [
     {
-      "src": "/math-masters/icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/math-masters/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
